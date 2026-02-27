@@ -48,8 +48,8 @@ export function CardForm({ onSubmit, onClose, types, initialData, isEditing = fa
   const selectedGradient = selectedType ? typeColors[selectedType] : '';
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 ">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
         {/* Header */}
         <div className={`bg-linear-to-r ${selectedGradient || 'from-orange-500 to-purple-600'} p-6 rounded-t-3xl relative transition-all duration-300`}>
           <button

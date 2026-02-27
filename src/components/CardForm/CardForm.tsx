@@ -57,7 +57,7 @@ export function CardForm({ onSubmit, onClose, types, initialData, isEditing = fa
             className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all"
             aria-label="Fechar"
           >
-            <X size={20} />
+            <X size={15} />
           </button>
           <h2 className="text-2xl text-white font-nunito-extrabold">
             {isEditing ? 'Editar Cartão de Melhoria' : 'Novo Cartão de Melhoria'}

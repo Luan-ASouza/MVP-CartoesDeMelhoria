@@ -3,6 +3,7 @@ import { Card } from './components/Card/Card';
 import { Header } from './components/Header/Header';
 import { CardForm } from './components/CardForm/CardForm';
 import { Plus } from 'lucide-react';
+import { FilterDropdown } from './components/FilterDropdown/FilterDropdown'
 
 
 interface CardData {
@@ -67,7 +68,7 @@ export default function App() {
   // Calcular totais
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
-  
+
   const totalCardsYear = cards.filter(card => {
     const cardDate = new Date(card.date);
     return cardDate.getFullYear() === currentYear;
@@ -80,11 +81,11 @@ export default function App() {
 
   const addNewCard = (formData: { type: string; description: string; date: string }) => {
     const newId = Math.max(...cards.map(c => c.id), 0) + 1;
-    
+
     // Formatar data para o padrão brasileiro
     const dateObj = new Date(formData.date + 'T00:00:00');
     const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
-    
+
     const newCard: CardData = {
       id: newId,
       date: formattedDate,
@@ -105,17 +106,17 @@ export default function App() {
     const dateObj = new Date(formData.date + 'T00:00:00');
     const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 
-    setCards(cards.map(card => 
-      card.id === editingCardId 
+    setCards(cards.map(card =>
+      card.id === editingCardId
         ? {
-            ...card,
-            type: formData.type,
-            description: formData.description,
-            date: formattedDate
-          }
+          ...card,
+          type: formData.type,
+          description: formData.description,
+          date: formattedDate
+        }
         : card
     ));
-    
+
     setShowForm(false);
     setEditingCardId(null);
   };
@@ -161,9 +162,9 @@ export default function App() {
       const newFilters = selectedTypeFilters.includes('Todos')
         ? [type]
         : selectedTypeFilters.includes(type)
-        ? selectedTypeFilters.filter(t => t !== type)
-        : [...selectedTypeFilters, type];
-      
+          ? selectedTypeFilters.filter(t => t !== type)
+          : [...selectedTypeFilters, type];
+
       setSelectedTypeFilters(newFilters.length === 0 ? ['Todos'] : newFilters);
     }
   };
@@ -171,14 +172,14 @@ export default function App() {
   // Filtrar cartões
   const filteredCards = cards.filter(card => {
     // Filtro de pesquisa
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === '' ||
       card.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       card.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
       card.memberName.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     // Filtro de tipo
     const matchesType = selectedTypeFilters.includes('Todos') || selectedTypeFilters.includes(card.type);
-    
+
     return matchesSearch && matchesType;
   });
 
@@ -202,7 +203,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-orange-50 via-purple-50 to-pink-50">
-      <Header 
+      <Header
         groupName="Desenvolvedores Frontend"
         userName={currentUser.name}
         userPhoto={currentUser.photo}
@@ -211,7 +212,7 @@ export default function App() {
         onBack={handleBack}
         onMenuClick={handleMenuClick}
       />
-      
+
       <div className="px-6 py-8 -mt-6">
         <div className="max-w-7xl mx-auto">
           {/* Estatísticas */}
@@ -244,7 +245,7 @@ export default function App() {
             <h2 className="text-2xl text-gray-800 font-nunito-bold">
               Cartões de melhoria
             </h2>
-            
+
             <button
               onClick={() => setShowForm(true)}
               className="flex items-center gap-2 bg-linear-to-r from-orange-500 to-purple-600 text-white px-5 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
@@ -255,31 +256,11 @@ export default function App() {
           </div>
 
           {/* Filtros de tipo */}
-          <div className="bg-white rounded-2xl p-4 shadow-lg mb-6">
-            <p className="text-sm text-gray-600 mb-3 font-nunito-bold">Filtrar por tipo:</p>
-            <div className="flex flex-wrap gap-3">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedTypeFilters.includes('Todos')}
-                  onChange={() => handleTypeFilterToggle('Todos')}
-                  className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="text-sm text-gray-700">Todos</span>
-              </label>
-              {types.map((type) => (
-                <label key={type} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedTypeFilters.includes(type)}
-                    onChange={() => handleTypeFilterToggle(type)}
-                    className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                  />
-                  <span className="text-sm text-gray-700">{type}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <FilterDropdown
+            onFilter={handleTypeFilterToggle}
+            types={types}
+            selectedTypeFilters={selectedTypeFilters}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCards.map((card) => (

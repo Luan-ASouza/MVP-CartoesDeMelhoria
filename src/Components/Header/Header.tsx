@@ -1,5 +1,5 @@
 import { ArrowLeft, Menu } from 'lucide-react';
-import logo from '../../assets/Images/logo.avif';
+import logo from '../../assets/Images/logo.svg';
 
 interface HeaderProps {
   groupName: string;

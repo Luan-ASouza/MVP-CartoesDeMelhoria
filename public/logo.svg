@@ -1,0 +1,14 @@
+<svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+
+  <!-- Arco circular -->
+  <path d="M20 50 
+           A30 30 0 1 1 50 80" />
+
+  <!-- Ponta da seta -->
+  <polyline points="45,72 50,80 40,80" />
+
+  <!-- Alvo central -->
+  <circle cx="50" cy="50" r="10" />
+  <circle cx="50" cy="50" r="4" fill="currentColor" stroke="none"/>
+
+</svg>

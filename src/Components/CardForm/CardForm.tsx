@@ -16,7 +16,7 @@ interface CardFormProps {
   editingCardId?: number | null;
 }
 
-export function CardForm({ onSubmit, onClose, types, initialData, isEditing = false, editingCardId = null }: CardFormProps) {
+export function CardForm({ onSubmit, onClose, types, initialData, isEditing = false}: CardFormProps) {
   const [selectedType, setSelectedType] = useState(initialData?.type || '');
   const [description, setDescription] = useState(initialData?.description || '');
   const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
@@ -51,7 +51,7 @@ export function CardForm({ onSubmit, onClose, types, initialData, isEditing = fa
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Header */}
-        <div className={`bg-gradient-to-r ${selectedGradient || 'from-orange-500 to-purple-600'} p-6 rounded-t-3xl relative transition-all duration-300`}>
+        <div className={`bg-linear-to-r ${selectedGradient || 'from-orange-500 to-purple-600'} p-6 rounded-t-3xl relative transition-all duration-300`}>
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all"
@@ -84,7 +84,7 @@ export function CardForm({ onSubmit, onClose, types, initialData, isEditing = fa
                     key={type}
                     className={`flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
                       isSelected
-                        ? `bg-gradient-to-br ${gradient} border-transparent text-white`
+                        ? `bg-linear-to-br ${gradient} border-transparent text-white`
                         : 'border-gray-200 hover:border-gray-300 bg-white'
                     }`}
                   >
@@ -147,7 +147,7 @@ export function CardForm({ onSubmit, onClose, types, initialData, isEditing = fa
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-purple-600 text-white hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+              className="flex-1 px-6 py-3 rounded-2xl bg-linear-to-r from-orange-500 to-purple-600 text-white hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
             >
               {isEditing ? 'Salvar Alterações' : 'Adicionar Cartão'}
             </button>

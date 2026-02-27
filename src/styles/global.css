@@ -16,9 +16,6 @@
   font-display: swap;
 }
 
-@theme {
-  --font-nunito: "Nunito", sans-serif;
-}
 
 body{
     font-family: 'Lexend', sans-serif;

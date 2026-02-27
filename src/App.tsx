@@ -61,15 +61,8 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTypeFilters, setSelectedTypeFilters] = useState<string[]>(['Todos']);
 
-  const memberPhotos = [
-    'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=100&h=100&fit=crop',
-    'https://images.unsplash.com/photo-1672685667592-0392f458f46f?w=100&h=100&fit=crop',
-    'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100&h=100&fit=crop',
-    'https://images.unsplash.com/photo-1524538198441-241ff79d153b?w=100&h=100&fit=crop'
-  ];
 
   const types = ['Desenvolvimento', 'Code Review', 'Documentação', 'Bug Fix', 'Design', 'Reunião', 'Planejamento'];
-  const memberNames = ['Ana Silva', 'Carlos Souza', 'Mariana Costa', 'Pedro Santos', 'Julia Oliveira', 'Ricardo Lima'];
 
   // Calcular totais
   const currentYear = new Date().getFullYear();
@@ -208,7 +201,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-purple-50 to-pink-50">
       <Header 
         groupName="Desenvolvedores Frontend"
         userName={currentUser.name}
@@ -223,7 +216,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           {/* Estatísticas */}
           <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="bg-gradient-to-br from-orange-400 to-orange-600 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden">
+            <div className="bg-linear-to-br from-orange-400 to-orange-600 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
                 <p className="text-white/90 text-sm mb-2">Total do Ano</p>
@@ -234,7 +227,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-400 to-purple-600 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden">
+            <div className="bg-linear-to-br from-purple-400 to-purple-600 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
                 <p className="text-white/90 text-sm mb-2">Total do Mês</p>
@@ -254,7 +247,7 @@ export default function App() {
             
             <button
               onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-purple-600 text-white px-5 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="flex items-center gap-2 bg-linear-to-r from-orange-500 to-purple-600 text-white px-5 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus size={20} />
               <span className="text-sm">Novo Cartão</span>
@@ -311,7 +304,7 @@ export default function App() {
               <p className="text-gray-400 text-lg mb-6">Nenhum cartão adicionado ainda</p>
               <button
                 onClick={() => setShowForm(true)}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-purple-600 text-white px-6 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-2 bg-linear-to-r from-orange-500 to-purple-600 text-white px-6 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
               >
                 <Plus size={20} />
                 Novo Cartão

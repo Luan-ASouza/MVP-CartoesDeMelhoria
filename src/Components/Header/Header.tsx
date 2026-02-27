@@ -13,7 +13,7 @@ interface HeaderProps {
 
 export function Header({ groupName, userName, userPhoto, onBack, onMenuClick, searchQuery, onSearchChange }: HeaderProps) {
   return (
-    <header className="relative bg-gradient-to-br from-orange-500 via-purple-500 to-pink-500 overflow-hidden">
+    <header className="relative bg-linear-to-br from-orange-500 via-purple-500 to-pink-500 overflow-hidden">
       {/* Formas decorativas */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>

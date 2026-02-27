@@ -30,6 +30,7 @@ export function Card({ id, date, description, type, memberName, memberPhoto, onR
     <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1 flex flex-col h-full">
       {/* Header colorido com gradiente */}
       <div className={`bg-linear-to-br ${gradient} p-4 relative`}>
+        {currentUserName === memberName && (
         <div className="absolute top-3 right-3">
           <button
             onClick={() => onRemove(id)}
@@ -39,6 +40,7 @@ export function Card({ id, date, description, type, memberName, memberPhoto, onR
             <Trash2 size={16} />
           </button>
         </div>
+        )}
         
         <div className="flex items-center justify-between">
           <span className="inline-block px-3 py-1 bg-white/30 backdrop-blur-sm text-white rounded-full text-xs">

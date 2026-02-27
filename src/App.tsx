@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Card } from './Components/Cards/Card';
-import { Header } from './Components/Header/Header.tsx';
+import { Card } from './components/Card/Card';
+import { Header } from './components/Header/Header';
+import { CardForm } from './components/CardForm/CardForm';
 import { Plus } from 'lucide-react';
+
 
 interface CardData {
   id: number;
@@ -13,6 +15,12 @@ interface CardData {
 }
 
 export default function App() {
+  // Usuário logado
+  const currentUser = {
+    name: 'Ana Silva',
+    photo: 'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=100&h=100&fit=crop'
+  };
+
   const [cards, setCards] = useState<CardData[]>([
     {
       id: 1,
@@ -48,6 +56,11 @@ export default function App() {
     }
   ]);
 
+  const [showForm, setShowForm] = useState(false);
+  const [editingCardId, setEditingCardId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTypeFilters, setSelectedTypeFilters] = useState<string[]>(['Todos']);
+
   const memberPhotos = [
     'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=100&h=100&fit=crop',
     'https://images.unsplash.com/photo-1672685667592-0392f458f46f?w=100&h=100&fit=crop',
@@ -72,22 +85,59 @@ export default function App() {
     return cardDate.getFullYear() === currentYear && cardDate.getMonth() === currentMonth;
   }).length;
 
-  const addNewCard = () => {
-    const newId = Math.max(...cards.map(c => c.id)) + 1;
-    const randomType = types[Math.floor(Math.random() * types.length)];
-    const randomMember = memberNames[Math.floor(Math.random() * memberNames.length)];
-    const randomPhoto = memberPhotos[Math.floor(Math.random() * memberPhotos.length)];
+  const addNewCard = (formData: { type: string; description: string; date: string }) => {
+    const newId = Math.max(...cards.map(c => c.id), 0) + 1;
+    
+    // Formatar data para o padrão brasileiro
+    const dateObj = new Date(formData.date + 'T00:00:00');
+    const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
     
     const newCard: CardData = {
       id: newId,
-      date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }),
-      description: `Nova tarefa adicionada ao projeto. Aguardando revisão e aprovação dos demais membros do time.`,
-      type: randomType,
-      memberName: randomMember,
-      memberPhoto: randomPhoto
+      date: formattedDate,
+      description: formData.description,
+      type: formData.type,
+      memberName: currentUser.name,
+      memberPhoto: currentUser.photo
     };
 
-    setCards([...cards, newCard]);
+    setCards([newCard, ...cards]);
+    setShowForm(false);
+  };
+
+  const updateCard = (formData: { type: string; description: string; date: string }) => {
+    if (!editingCardId) return;
+
+    // Formatar data para o padrão brasileiro
+    const dateObj = new Date(formData.date + 'T00:00:00');
+    const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    setCards(cards.map(card => 
+      card.id === editingCardId 
+        ? {
+            ...card,
+            type: formData.type,
+            description: formData.description,
+            date: formattedDate
+          }
+        : card
+    ));
+    
+    setShowForm(false);
+    setEditingCardId(null);
+  };
+
+  const handleFormSubmit = (formData: { type: string; description: string; date: string }) => {
+    if (editingCardId) {
+      updateCard(formData);
+    } else {
+      addNewCard(formData);
+    }
+  };
+
+  const handleFormClose = () => {
+    setShowForm(false);
+    setEditingCardId(null);
   };
 
   const removeCard = (id: number) => {
@@ -95,8 +145,12 @@ export default function App() {
   };
 
   const editCard = (id: number) => {
-    console.log('Editar card:', id);
-    // Aqui você pode adicionar lógica para abrir um modal de edição
+    const card = cards.find(c => c.id === id);
+    // Só permite editar se for do usuário logado
+    if (card && card.memberName === currentUser.name) {
+      setEditingCardId(id);
+      setShowForm(true);
+    }
   };
 
   const handleBack = () => {
@@ -107,10 +161,60 @@ export default function App() {
     console.log('Menu clicado');
   };
 
+  const handleTypeFilterToggle = (type: string) => {
+    if (type === 'Todos') {
+      setSelectedTypeFilters(['Todos']);
+    } else {
+      const newFilters = selectedTypeFilters.includes('Todos')
+        ? [type]
+        : selectedTypeFilters.includes(type)
+        ? selectedTypeFilters.filter(t => t !== type)
+        : [...selectedTypeFilters, type];
+      
+      setSelectedTypeFilters(newFilters.length === 0 ? ['Todos'] : newFilters);
+    }
+  };
+
+  // Filtrar cartões
+  const filteredCards = cards.filter(card => {
+    // Filtro de pesquisa
+    const matchesSearch = searchQuery === '' || 
+      card.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      card.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      card.memberName.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filtro de tipo
+    const matchesType = selectedTypeFilters.includes('Todos') || selectedTypeFilters.includes(card.type);
+    
+    return matchesSearch && matchesType;
+  });
+
+  // Converter data do formato brasileiro (DD MMM YYYY) para YYYY-MM-DD
+  const convertBrDateToISO = (brDate: string): string => {
+    const monthMap: { [key: string]: string } = {
+      'jan': '01', 'fev': '02', 'mar': '03', 'abr': '04',
+      'mai': '05', 'jun': '06', 'jul': '07', 'ago': '08',
+      'set': '09', 'out': '10', 'nov': '11', 'dez': '12'
+    };
+
+    const parts = brDate.split(' ');
+    if (parts.length !== 3) return new Date().toISOString().split('T')[0];
+
+    const day = parts[0].padStart(2, '0');
+    const month = monthMap[parts[1].toLowerCase()] || '01';
+    const year = parts[2];
+
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-purple-50 to-pink-50">
       <Header 
         groupName="Desenvolvedores Frontend"
+        userName={currentUser.name}
+        userPhoto={currentUser.photo}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
         onBack={handleBack}
         onMenuClick={handleMenuClick}
       />
@@ -123,7 +227,7 @@ export default function App() {
               <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
                 <p className="text-white/90 text-sm mb-2">Total do Ano</p>
-                <p className="text-4xl mb-1">
+                <p className="text-4xl mb-1 font-nunito-extrabold">
                   {totalCardsYear}
                 </p>
                 <p className="text-white/70 text-xs">cartões</p>
@@ -134,7 +238,7 @@ export default function App() {
               <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
                 <p className="text-white/90 text-sm mb-2">Total do Mês</p>
-                <p className="text-4xl mb-1">
+                <p className="text-4xl mb-1 font-nunito-extrabold">
                   {totalCardsMonth}
                 </p>
                 <p className="text-white/70 text-xs">cartões</p>
@@ -144,12 +248,12 @@ export default function App() {
 
           {/* Título e botão */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl text-gray-800" style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 700 }}>
+            <h2 className="text-2xl text-gray-800 font-nunito-bold">
               Cartões de melhoria
             </h2>
             
             <button
-              onClick={addNewCard}
+              onClick={() => setShowForm(true)}
               className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-purple-600 text-white px-5 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus size={20} />
@@ -157,8 +261,35 @@ export default function App() {
             </button>
           </div>
 
+          {/* Filtros de tipo */}
+          <div className="bg-white rounded-2xl p-4 shadow-lg mb-6">
+            <p className="text-sm text-gray-600 mb-3 font-nunito-bold">Filtrar por tipo:</p>
+            <div className="flex flex-wrap gap-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedTypeFilters.includes('Todos')}
+                  onChange={() => handleTypeFilterToggle('Todos')}
+                  className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                />
+                <span className="text-sm text-gray-700">Todos</span>
+              </label>
+              {types.map((type) => (
+                <label key={type} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedTypeFilters.includes(type)}
+                    onChange={() => handleTypeFilterToggle(type)}
+                    className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                  />
+                  <span className="text-sm text-gray-700">{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {cards.map((card) => (
+            {filteredCards.map((card) => (
               <Card
                 key={card.id}
                 id={card.id}
@@ -167,18 +298,19 @@ export default function App() {
                 type={card.type}
                 memberName={card.memberName}
                 memberPhoto={card.memberPhoto}
+                currentUserName={currentUser.name}
                 onRemove={removeCard}
                 onEdit={editCard}
               />
             ))}
           </div>
 
-          {cards.length === 0 && (
+          {filteredCards.length === 0 && (
             <div className="text-center py-20 bg-white rounded-3xl shadow-lg">
               <div className="text-6xl mb-4">📋</div>
               <p className="text-gray-400 text-lg mb-6">Nenhum cartão adicionado ainda</p>
               <button
-                onClick={addNewCard}
+                onClick={() => setShowForm(true)}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-purple-600 text-white px-6 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
               >
                 <Plus size={20} />
@@ -188,6 +320,20 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {showForm && (
+        <CardForm
+          onClose={handleFormClose}
+          onSubmit={handleFormSubmit}
+          types={types}
+          isEditing={!!editingCardId}
+          initialData={editingCardId ? {
+            type: cards.find(c => c.id === editingCardId)?.type || '',
+            description: cards.find(c => c.id === editingCardId)?.description || '',
+            date: convertBrDateToISO(cards.find(c => c.id === editingCardId)?.date || '')
+          } : undefined}
+        />
+      )}
     </div>
   );
 }

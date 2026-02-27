@@ -9,9 +9,10 @@ interface CardProps {
   memberPhoto: string;
   onRemove: (id: number) => void;
   onEdit: (id: number) => void;
+  currentUserName?: string;
 }
 
-export function Card({ id, date, description, type, memberName, memberPhoto, onRemove, onEdit }: CardProps) {
+export function Card({ id, date, description, type, memberName, memberPhoto, onRemove, onEdit, currentUserName }: CardProps) {
   // Cores baseadas no tipo
   const typeColors: { [key: string]: string } = {
     'Desenvolvimento': 'from-blue-400 to-blue-600',
@@ -26,7 +27,7 @@ export function Card({ id, date, description, type, memberName, memberPhoto, onR
   const gradient = typeColors[type] || 'from-gray-400 to-gray-600';
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+    <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1 flex flex-col h-full">
       {/* Header colorido com gradiente */}
       <div className={`bg-gradient-to-br ${gradient} p-4 relative`}>
         <div className="absolute top-3 right-3">
@@ -46,16 +47,16 @@ export function Card({ id, date, description, type, memberName, memberPhoto, onR
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="p-5 flex-1 flex flex-col">
         <p className="text-xs text-gray-500 mb-3 flex items-center gap-1">
           <span>📅</span> {date}
         </p>
 
-        <p className="text-gray-700 text-sm leading-relaxed mb-4">
-          {description}
+        <p className="text-gray-700 text-sm leading-relaxed mb-4 flex-1">
+          {description.length > 200 ? `${description.substring(0, 200)}...` : description}
         </p>
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
           <div className="flex items-center gap-2">
             <img
               src={memberPhoto}
@@ -65,14 +66,16 @@ export function Card({ id, date, description, type, memberName, memberPhoto, onR
             <span className="text-sm text-gray-600">{memberName}</span>
           </div>
 
-          <button
-            onClick={() => onEdit(id)}
-            className="flex items-center gap-1.5 text-gray-500 hover:text-purple-600 transition-colors px-3 py-2 hover:bg-purple-50 rounded-xl"
-            aria-label="Editar card"
-          >
-            <Pencil size={14} />
-            <span className="text-xs">Editar</span>
-          </button>
+          {currentUserName === memberName && (
+            <button
+              onClick={() => onEdit(id)}
+              className="flex items-center gap-1.5 text-gray-500 hover:text-purple-600 transition-colors px-3 py-2 hover:bg-purple-50 rounded-xl"
+              aria-label="Editar card"
+            >
+              <Pencil size={14} />
+              <span className="text-xs">Editar</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

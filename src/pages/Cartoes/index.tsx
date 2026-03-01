@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Card } from '../../components/Card';
-import { CardForm } from '../../components/CardForm';
 import { Plus } from 'lucide-react';
 import { FilterDropdown } from '../../components/FilterDropdown'
 import { SearchBar } from '../../components/SearchBar';
 import { useUser } from '../../context/UserContext';
 import { type CardData, CardsMock } from '../../mocks/CardMock';
+import CardFormSkeleton from '../../components/CardForm/CardFormSkeleton';
 
+import { lazy, Suspense } from 'react';
+
+const CardForm = lazy(() => import('../../components/CardForm/CardForm'));
 
 export const Cartoes = () => {
     const { Loggeduser } = useUser();
@@ -239,18 +242,22 @@ export const Cartoes = () => {
             </div>
 
             {showForm && (
-                <CardForm
-                    onClose={handleFormClose}
-                    onSubmit={handleFormSubmit}
-                    types={types}
-                    isEditing={!!editingCardId}
-                    initialData={editingCardId ? {
-                        type: cards.find(c => c.id === editingCardId)?.type || '',
-                        description: cards.find(c => c.id === editingCardId)?.description || '',
-                        date: convertBrDateToISO(cards.find(c => c.id === editingCardId)?.date || '')
-                    } : undefined}
-                />
+                <Suspense fallback={<CardFormSkeleton/>}>
+                    <CardForm
+                        onClose={handleFormClose}
+                        onSubmit={handleFormSubmit}
+                        types={types}
+                        isEditing={!!editingCardId}
+                        initialData={editingCardId ? {
+                            type: cards.find(c => c.id === editingCardId)?.type || '',
+                            description: cards.find(c => c.id === editingCardId)?.description || '',
+                            date: convertBrDateToISO(cards.find(c => c.id === editingCardId)?.date || '')
+                        } : undefined}
+                    />
+                </Suspense>
             )}
         </div>
     );
 }
+
+export default Cartoes;

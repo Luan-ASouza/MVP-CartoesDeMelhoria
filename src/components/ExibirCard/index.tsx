@@ -42,3 +42,5 @@ export const ExibirCard = () => {
         </>
     );
 };
+
+export default ExibirCard;

@@ -157,3 +157,7 @@ export function CardForm({ onSubmit, onClose, types, initialData, isEditing = fa
     </div>
   );
 }
+
+
+
+export default CardForm;

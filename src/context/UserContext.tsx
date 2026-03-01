@@ -3,12 +3,13 @@ import { createContext, useContext, type ReactNode } from "react";
 export interface User {
   userPhoto: string;
   userName: string;
+  groupName: string;
 }
 
 const currentUser: User = {
   userName: "Ana Silva",
-  userPhoto:
-    "https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=100&h=100&fit=crop",
+  userPhoto: "https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=100&h=100&fit=crop",
+  groupName: "Desenvolvedores Frontend",
 };
 
 interface UserContextType {

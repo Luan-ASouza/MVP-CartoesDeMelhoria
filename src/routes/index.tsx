@@ -1,23 +1,46 @@
 import { Routes, Route } from "react-router-dom";
-import { Layout } from "../components/Layout";
-import { Inicio } from "../pages/Inicio";
-import { Cartoes } from "../pages/Cartoes";
-import { Armarios } from "../pages/Armarios";
-import { Etiquetas } from "../pages/Etiquetas";
-import { ExibirCard } from "../components/ExibirCard";
+import { lazy, Suspense } from "react";
+import Inicio from "../pages/Inicio";
+import { Loading } from "../components/Loading";
+import Layout from "../components/Layout";
+
+/* const Layout = lazy(() => import("../components/Layout")); */
+const Cartoes = lazy(() => import("../pages/Cartoes"));
+const Armarios = lazy(() => import("../pages/Armarios"));
+const Etiquetas = lazy(() => import("../pages/Etiquetas"));
+const ExibirCard = lazy(() => import("../components/ExibirCard"));
 
 export const Router = () => {
-    return (
-        <Routes>
-            <Route
-                path="/"
-                element={<Layout />}>
-                <Route index element={<Inicio />} />
-                <Route path="/cartoes" element={<Cartoes />} />
-                <Route path="/etiquetas" element={<Etiquetas />} />
-                <Route path="/armarios" element={<Armarios />} />
-                <Route path="/cartoes/:id" element={<ExibirCard/>}/>
-            </Route>
-        </Routes>
-    )
-}
+  return (
+    <Routes>
+      <Route path="/" element={<Inicio />} />
+
+      <Route
+        element={
+          <Layout />
+        }
+      >
+        <Route path="/cartoes" element={
+          <Suspense fallback={<Loading />}>
+            <Cartoes />
+          </Suspense>
+        } />
+        <Route path="/etiquetas" element={
+          <Suspense fallback={<Loading />}>
+            <Etiquetas />
+          </Suspense>
+        } />
+        <Route path="/armarios" element={
+          <Suspense fallback={<Loading />}>
+            <Armarios />
+          </Suspense>
+        } />
+        <Route path="/cartoes/:id" element={
+          <Suspense fallback={<Loading />}>
+            <ExibirCard />
+          </Suspense>
+        } />
+      </Route>
+    </Routes>
+  );
+};

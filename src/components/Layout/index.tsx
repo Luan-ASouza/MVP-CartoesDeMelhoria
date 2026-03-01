@@ -24,7 +24,6 @@ export const Layout = () => {
         <>
             {showHeader && (
                 <Header
-                    groupName="Desenvolvedores Frontend"
                     onBack={handleBack}
                     onMenuClick={handleMenuClick}
                 />
@@ -45,3 +44,5 @@ export const Layout = () => {
         </>
     )
 }
+
+export default Layout;

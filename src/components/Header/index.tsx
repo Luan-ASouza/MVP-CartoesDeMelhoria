@@ -3,13 +3,12 @@ import logo from '../../assets/Images/logo.svg';
 import { useUser } from '../../context/UserContext';
 
 interface HeaderProps {
-  groupName: string;
   onBack?: () => void;
   onMenuClick?: () => void;
 }
 
 
-export function Header({ groupName, onBack, onMenuClick }: HeaderProps) {
+export function Header({ onBack, onMenuClick }: HeaderProps) {
   const { Loggeduser } = useUser();
   return (
     <header className="relative bg-linear-to-br from-orange-500 via-purple-500 to-pink-500 overflow-hidden">
@@ -57,7 +56,7 @@ export function Header({ groupName, onBack, onMenuClick }: HeaderProps) {
             <h1 className="text-2xl text-white leading-tight font-nunito font-black">
               Melhoria Continua
             </h1>
-            <p className="text-sm text-white/80">{groupName}</p>
+            <p className="text-sm text-white/80">{Loggeduser.groupName}</p>
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ export function FilterDropdown({onFilter, types, selectedTypeFilters}:FilterProp
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center"
       >
-        <p className="text-sm text-gray-600 mr-1 font-nunito-bold">Filtrar por tipo </p> {!isOpen? <ChevronRight size={15}/> : <ChevronDown size={15}/>}
+        <p className="text-sm text-gray-600 mr-1 font-nunito-bold">Filtrar por tipo </p> {!isOpen? <ChevronRight size={15} color="#4a5565"/> : <ChevronDown size={15} color="#4a5565"/>}
       </button>
 
       {isOpen && (

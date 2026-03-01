@@ -214,12 +214,7 @@ export const Cartoes = () => {
                         {filteredCards.map((card) => (
                             <Card
                                 key={card.id}
-                                id={card.id}
-                                date={card.date}
-                                description={card.description}
-                                type={card.type}
-                                memberName={card.memberName}
-                                memberPhoto={card.memberPhoto}
+                                CardData={card}
                                 currentUserName={Loggeduser.userName}
                                 onRemove={removeCard}
                                 onEdit={editCard}

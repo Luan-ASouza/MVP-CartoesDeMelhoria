@@ -4,6 +4,7 @@ import { Inicio } from "../pages/Inicio";
 import { Cartoes } from "../pages/Cartoes";
 import { Armarios } from "../pages/Armarios";
 import { Etiquetas } from "../pages/Etiquetas";
+import { ExibirCard } from "../components/ExibirCard";
 
 export const Router = () => {
     return (
@@ -15,6 +16,7 @@ export const Router = () => {
                 <Route path="/cartoes" element={<Cartoes />} />
                 <Route path="/etiquetas" element={<Etiquetas />} />
                 <Route path="/armarios" element={<Armarios />} />
+                <Route path="/cartoes/:id" element={<ExibirCard/>}/>
             </Route>
         </Routes>
     )

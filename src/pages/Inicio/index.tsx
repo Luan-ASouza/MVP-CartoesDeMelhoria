@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
-import { NotebookPen, BookOpen, Tags, TrendingUp } from 'lucide-react';
+import { NotebookPen, Grid3x2, Tags, TrendingUp } from 'lucide-react';
 import logo from '../../assets/Images/logo.svg';
 
-export default function Home() {
+export const Inicio = () => {
   const menuCards = [
     {
       path: '/cartoes',
@@ -15,7 +15,7 @@ export default function Home() {
       path: '/armarios',
       title: 'Armários',
       description: 'Organize e acesse seus armários virtuais',
-      icon: BookOpen,
+      icon: Grid3x2,
       gradient: 'from-green-400 to-green-600',
     },
     {
@@ -28,9 +28,9 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-orange-500 via-purple-500 to-pink-500 overflow-hidden">
+      <div className="relative bg-linear-to-br from-orange-500 via-purple-500 to-pink-500 overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
         
@@ -62,7 +62,7 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-linear-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mb-4">
                   <TrendingUp className="text-white" size={24} />
                 </div>
                 <p className="text-3xl font-nunito-extrabold text-gray-800 dark:text-white mb-1">24</p>
@@ -73,7 +73,7 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-linear-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
                   <NotebookPen className="text-white" size={24} />
                 </div>
                 <p className="text-3xl font-nunito-extrabold text-gray-800 dark:text-white mb-1">156</p>
@@ -84,8 +84,8 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
-                <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-600 rounded-2xl flex items-center justify-center mb-4">
-                  <BookOpen className="text-white" size={24} />
+                <div className="w-12 h-12 bg-linear-to-br from-pink-400 to-pink-600 rounded-2xl flex items-center justify-center mb-4">
+                  <Grid3x2 className="text-white" size={24} />
                 </div>
                 <p className="text-3xl font-nunito-extrabold text-gray-800 dark:text-white mb-1">8</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Armários ativos</p>
@@ -112,7 +112,7 @@ export default function Home() {
                   to={card.path}
                   className="group bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                 >
-                  <div className={`w-16 h-16 bg-gradient-to-br ${card.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`w-16 h-16 bg-linear-to-br ${card.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className="text-white" size={32} />
                   </div>
                   

@@ -1,7 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import Home from "../pages/Home";
-import { Cards } from "../pages/Cards";
+import { Inicio } from "../pages/Inicio";
+import { Cartoes } from "../pages/Cartoes";
+import { Armarios } from "../pages/Armarios";
+import { Etiquetas } from "../pages/Etiquetas";
 
 export const Router = () => {
     return (
@@ -9,8 +11,10 @@ export const Router = () => {
             <Route
                 path="/"
                 element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="/cartoes" element={<Cards />} />
+                <Route index element={<Inicio />} />
+                <Route path="/cartoes" element={<Cartoes />} />
+                <Route path="/etiquetas" element={<Etiquetas />} />
+                <Route path="/armarios" element={<Armarios />} />
             </Route>
         </Routes>
     )

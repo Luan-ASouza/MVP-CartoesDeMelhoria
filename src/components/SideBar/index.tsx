@@ -1,4 +1,4 @@
-import { Home, NotebookPen, BookOpen, Tags, LogOut, Moon, Sun } from 'lucide-react';
+import { Home, NotebookPen, Grid3x2, Tags, LogOut, Moon, Sun } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { useTheme } from '../../context/ThemeContext';
 import { useUser } from '../../context/UserContext';
@@ -16,7 +16,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const menuItems = [
     { path: '/', label: 'Início', icon: Home },
     { path: '/cartoes', label: 'Cartões', icon: NotebookPen },
-    { path: '/armarios', label: 'Armários', icon: BookOpen },
+    { path: '/armarios', label: 'Armários', icon: Grid3x2 },
     { path: '/etiquetas', label: 'Etiquetas', icon: Tags },
   ];
 
@@ -40,7 +40,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         <div className="flex flex-col h-full">
           {/* User Profile */}
-          <div className="bg-gradient-to-br from-orange-500 via-purple-500 to-pink-500 p-6 relative overflow-hidden">
+          <div className="bg-linear-to-br from-orange-500 via-purple-500 to-pink-500 p-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div className="relative z-10 flex flex-col items-center">
               <img
@@ -66,7 +66,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       to={item.path}
                       onClick={onClose}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-                        ? 'bg-gradient-to-r from-orange-500 to-purple-600 text-white shadow-lg'
+                        ? 'bg-linear-to-r from-orange-500 to-purple-600 text-white shadow-lg'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                         }`}
                     >

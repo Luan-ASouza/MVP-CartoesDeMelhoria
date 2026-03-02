@@ -50,7 +50,7 @@ export const Inicio = () => {
         {/* Ondas na parte inferior */}
         <div className="absolute bottom-0 left-0 right-0 h-8">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
-            <path d="M0,0 C150,60 350,0 600,40 C850,80 1050,20 1200,60 L1200,120 L0,120 Z" fill="currentColor" className="text-orange-50 dark:text-gray-900" />
+            <path d="M0,0 C150,60 350,0 600,40 C850,80 1050,20 1200,60 L1200,120 L0,120 Z" fill="none" className="text-orange-50 dark:text-gray-900" />
           </svg>
         </div>
       </div>

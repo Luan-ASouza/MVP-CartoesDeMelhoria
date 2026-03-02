@@ -23,21 +23,23 @@ export function Card({ CardData, onRemove, onEdit, currentUserName }: CardProps)
   const gradient = typeColors[CardData.type] || 'from-gray-400 to-gray-600';
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1 flex flex-col h-full">
+    <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1 flex flex-col h-full">
+      
       {/* Header colorido com gradiente */}
       <div className={`bg-linear-to-br ${gradient} p-4 relative`}>
-        {currentUserName === CardData.memberName && (
-        <div className="absolute top-3 right-3">
-          <button
-            onClick={() => onRemove(CardData.id)}
-            className="text-white/80 hover:text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all flex items-center justify-center"
-            aria-label="Remover card"
-          >
-            <Trash2 size={16} />
-          </button>
-        </div>
-        )}
         
+        {currentUserName === CardData.memberName && (
+          <div className="absolute top-3 right-3">
+            <button
+              onClick={() => onRemove(CardData.id)}
+              className="text-white/80 hover:text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all flex items-center justify-center"
+              aria-label="Remover card"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <span className="inline-block px-3 py-1 bg-white/30 backdrop-blur-sm text-white rounded-full text-xs">
             {CardData.type}
@@ -46,28 +48,34 @@ export function Card({ CardData, onRemove, onEdit, currentUserName }: CardProps)
       </div>
 
       <div className="p-5 flex-1 flex flex-col">
-        <p className="text-xs text-gray-500 mb-3 flex items-center gap-1">
+        
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1">
           <span>📅</span> {CardData.date}
         </p>
 
-        <p className="text-gray-700 text-sm leading-relaxed mb-4 flex-1">
-          {CardData.description.length > 200 ? `${CardData.description.substring(0, 200)}...` : CardData.description}
+        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-4 flex-1">
+          {CardData.description.length > 200
+            ? `${CardData.description.substring(0, 200)}...`
+            : CardData.description}
         </p>
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700 mt-auto">
+          
           <div className="flex items-center gap-2">
             <img
               src={CardData.memberPhoto}
               alt={CardData.memberName}
-              className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-100"
+              className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700"
             />
-            <span className="text-sm text-gray-600">{CardData.memberName}</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {CardData.memberName}
+            </span>
           </div>
 
           {currentUserName === CardData.memberName && (
             <button
               onClick={() => onEdit(CardData.id)}
-              className="flex items-center gap-1.5 text-gray-500 hover:text-purple-600 transition-colors px-3 py-2 hover:bg-purple-50 rounded-xl"
+              className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors px-3 py-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl"
               aria-label="Editar card"
             >
               <Pencil size={14} />

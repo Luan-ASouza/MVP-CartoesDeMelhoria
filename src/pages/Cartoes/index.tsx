@@ -156,9 +156,7 @@ export const Cartoes = () => {
     };
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-orange-50 via-purple-50 to-pink-50">
-
-
+        <div className="min-h-screen bg-linear-to-b from-orange-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
             <SearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
@@ -193,7 +191,7 @@ export const Cartoes = () => {
 
                     {/* Título e botão */}
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl text-gray-800 font-nunito-bold">
+                        <h2 className="text-2xl text-gray-800 dark:text-white font-nunito-bold">
                             Cartões de melhoria
                         </h2>
 
@@ -242,7 +240,7 @@ export const Cartoes = () => {
             </div>
 
             {showForm && (
-                <Suspense fallback={<CardFormSkeleton/>}>
+                <Suspense fallback={<CardFormSkeleton />}>
                     <CardForm
                         onClose={handleFormClose}
                         onSubmit={handleFormSubmit}

@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { Header } from "../Header"
-import { Footer } from "../Footer"
-import { Sidebar } from "../SideBar";
+import { Header } from "../../components/Header"
+import { Footer } from "../../components/Footer"
+import { Sidebar } from "../../components/SideBar";
 import { useState } from "react";
 import { ThemeProvider } from "../../context/ThemeContext";
 
@@ -17,31 +17,24 @@ export const Layout = () => {
         setSidebarOpen(true);
     };
 
-    // Não mostrar header na página inicial
-    const showHeader = location.pathname !== '/';
-
     return (
-        <>
-            {showHeader && (
+        <div className="min-h-screen flex flex-col">
+            <ThemeProvider>
                 <Header
                     onBack={handleBack}
                     onMenuClick={handleMenuClick}
                 />
-            )}
-            <ThemeProvider>
                 <Sidebar
                     isOpen={sidebarOpen}
                     onClose={() => setSidebarOpen(false)}
                 />
+                <main className="flex-1">
+                    <Outlet />
+                </main>
+
+                <Footer />
             </ThemeProvider>
-
-
-            <main className={showHeader ? '-mt-6' : ''}>
-                <Outlet />
-            </main>
-
-            <Footer />
-        </>
+        </div>
     )
 }
 

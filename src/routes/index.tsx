@@ -2,13 +2,13 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Inicio from "../pages/Inicio";
 import { Loading } from "../components/Loading";
-import Layout from "../components/Layout";
+import Layout from "../pages/Layout";
 
 /* const Layout = lazy(() => import("../components/Layout")); */
 const Cartoes = lazy(() => import("../pages/Cartoes"));
 const Armarios = lazy(() => import("../pages/Armarios"));
 const Etiquetas = lazy(() => import("../pages/Etiquetas"));
-const ExibirCard = lazy(() => import("../components/ExibirCard"));
+const ConjuntoArmarios = lazy(() => import("../pages/ConjuntoArmarios"));
 
 export const Router = () => {
   return (
@@ -35,9 +35,9 @@ export const Router = () => {
             <Armarios />
           </Suspense>
         } />
-        <Route path="/cartoes/:id" element={
+        <Route path="/armarios/:id" element={
           <Suspense fallback={<Loading />}>
-            <ExibirCard />
+            <ConjuntoArmarios />
           </Suspense>
         } />
       </Route>

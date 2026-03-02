@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
-import { NotebookPen, Grid3x2, Tags, TrendingUp } from 'lucide-react';
+import { NotebookPen, Grid3x2, Tags, /* TrendingUp */ } from 'lucide-react';
 import logo from '../../assets/Images/logo.svg';
+import ThemeButton from '../../components/ThemeButton';
 
 export const Inicio = () => {
   const menuCards = [
@@ -37,7 +38,7 @@ export const Inicio = () => {
         <div className="relative z-10 px-6 py-16 text-center">
           <img 
             src={logo} 
-            alt="SUMAM Logo" 
+            alt="Melhoria continua logo" 
             className="w-24 h-24 mx-auto mb-6 object-contain bg-white/20 backdrop-blur-sm rounded-3xl p-4"
           />
           <h1 className="text-5xl text-white mb-4 font-nunito-black">
@@ -55,8 +56,9 @@ export const Inicio = () => {
         </div>
       </div>
 
+
       {/* Stats Section */}
-      <div className="px-6 -mt-6 mb-12">
+      {/* <div className="px-6 -mt-6 mb-12">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg relative overflow-hidden">
@@ -93,14 +95,18 @@ export const Inicio = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Menu Cards */}
-      <div className="px-6 pb-12">
+      <div className='max-w-97  p-4 flex m-auto'>
+          <ThemeButton/>
+      </div>
+      <div className="p-6 pb-12">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-nunito-bold text-gray-800 dark:text-white mb-8 text-center">
             Acesso Rápido
           </h2>
+
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {menuCards.map((card) => {

@@ -1,7 +1,8 @@
-import { Home, NotebookPen, Grid3x2, Tags, LogOut, Moon, Sun } from 'lucide-react';
+import { Home, NotebookPen, Grid3x2, Tags, LogOut } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
-import { useTheme } from '../../context/ThemeContext';
+
 import { useUser } from '../../context/UserContext';
+import ThemeButton from '../ThemeButton';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,7 +12,7 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { Loggeduser } = useUser();
   const location = useLocation();
-  const { isDark, toggleTheme } = useTheme();
+
 
   const menuItems = [
     { path: '/', label: 'Início', icon: Home },
@@ -89,23 +90,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </nav>
 
-          {/* Theme Toggle */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
-            >
-              <span className="text-gray-700 dark:text-gray-300 font-medium">
-                {isDark ? 'Tema Escuro' : 'Tema Claro'}
-              </span>
-              <div className="flex items-center gap-2">
-                {isDark ? (
-                  <Moon size={20} className="text-purple-500" />
-                ) : (
-                  <Sun size={20} className="text-orange-500" />
-                )}
-              </div>
-            </button>
+          {/* Theme Toggle */}
+            <ThemeButton/>
           </div>
         </div>
       </aside>

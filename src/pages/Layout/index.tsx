@@ -3,7 +3,6 @@ import { Header } from "../../components/Header"
 import { Footer } from "../../components/Footer"
 import { Sidebar } from "../../components/SideBar";
 import { useState } from "react";
-import { ThemeProvider } from "../../context/ThemeContext";
 
 export const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,21 +18,18 @@ export const Layout = () => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <ThemeProvider>
-                <Header
-                    onBack={handleBack}
-                    onMenuClick={handleMenuClick}
-                />
-                <Sidebar
-                    isOpen={sidebarOpen}
-                    onClose={() => setSidebarOpen(false)}
-                />
-                <main className="flex-1">
-                    <Outlet />
-                </main>
-
-                <Footer />
-            </ThemeProvider>
+            <Header
+                onBack={handleBack}
+                onMenuClick={handleMenuClick}
+            />
+            <Sidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+            />
+            <main className="flex-1">
+                <Outlet />
+            </main>
+            <Footer />
         </div>
     )
 }

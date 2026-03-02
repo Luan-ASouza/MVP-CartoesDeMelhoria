@@ -203,6 +203,8 @@
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
   font-family: 'Lexend', sans-serif;
+    scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .no-scrollbar {

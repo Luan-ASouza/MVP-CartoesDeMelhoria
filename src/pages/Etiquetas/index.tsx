@@ -31,3 +31,5 @@ export function Etiquetas() {
     </div>
   );
 }
+
+export default Etiquetas;

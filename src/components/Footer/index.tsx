@@ -1,8 +1,15 @@
 export const Footer = () => {
-    return(
-        <div className="w-full px-2 py-2 text-center border-t-4 border-yellow-300 mb-0">
+    return (
+        <footer className="bg-gray-950 text-gray-300 py-6">
+            <div className="max-w-6xl mx-auto px-6 text-center">
+                <p className="text-sm">
+                    © {new Date().getFullYear()} Luan Augusto de Souza. Todos os direitos reservados.
+                </p>
 
-        <p>Esse é um footer</p>
-        </div>
+                <p className="text-xs text-gray-500 mt-2">
+                    Desenvolvido com dedicação e foco em melhoria contínua 🚀
+                </p>
+            </div>
+        </footer>
     )
 }

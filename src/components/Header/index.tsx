@@ -64,7 +64,7 @@ export function Header({ onBack, onMenuClick }: HeaderProps) {
       {/* Ondas na parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 h-8">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
-          <path d="M0,0 C150,60 350,0 600,40 C850,80 1050,20 1200,60 L1200,120 L0,120 Z" fill="#fef3f0" />
+          <path d="M0,0 C150,60 350,0 600,40 C850,80 1050,20 1200,60 L1200,120 L0,120 Z" className="dark:text-gray-900 text-white" fill="currentColor" />
         </svg>
       </div>
     </header>

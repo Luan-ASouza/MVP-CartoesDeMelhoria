@@ -71,7 +71,7 @@ export function Dashboards({
                 paddingAngle={5}
                 dataKey="value"
               >
-                {typeData.map((entry, index) => (
+                {typeData.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

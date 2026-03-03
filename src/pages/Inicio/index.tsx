@@ -4,7 +4,6 @@ import logo from '../../assets/Images/logo.svg';
 import ThemeButton from '../../components/ThemeButton';
 import { UserInfoCard } from '../../components/UserInfoCard';
 import { getUsuarioLogado } from '../../mocks/UsuariosMock';
-import LogoutButton from '../../components/LogoutButton';
 
 export const Inicio = () => {
   const Loggeduser = getUsuarioLogado();

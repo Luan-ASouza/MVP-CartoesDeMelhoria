@@ -1,9 +1,18 @@
-import { Link } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import { NotebookPen, Grid3x2, Tags, /* TrendingUp */ } from 'lucide-react';
 import logo from '../../assets/Images/logo.svg';
 import ThemeButton from '../../components/ThemeButton';
+import { UserInfoCard } from '../../components/UserInfoCard';
+import { getUsuarioLogado } from '../../mocks/UsuariosMock';
+import LogoutButton from '../../components/LogoutButton';
 
 export const Inicio = () => {
+  const Loggeduser = getUsuarioLogado();
+
+  if (!Loggeduser) {
+    return <Navigate to="/" />;
+  }
+
   const menuCards = [
     {
       path: '/cartoes',
@@ -29,16 +38,16 @@ export const Inicio = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-orange-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-linear-to-b from-orange-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800  dark:to-gray-900">
       {/* Hero Section */}
       <div className="relative bg-linear-to-br from-orange-500 via-purple-500 to-pink-500 overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-        
+
         <div className="relative z-10 px-6 py-16 text-center">
-          <img 
-            src={logo} 
-            alt="Melhoria continua logo" 
+          <img
+            src={logo}
+            alt="Melhoria continua logo"
             className="w-24 h-24 mx-auto mb-6 object-contain bg-white/20 backdrop-blur-sm rounded-3xl p-4"
           />
           <h1 className="text-5xl text-white mb-4 font-nunito-black">
@@ -51,8 +60,11 @@ export const Inicio = () => {
         {/* Ondas na parte inferior */}
         <div className="absolute bottom-0 left-0 right-0 h-8">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
-            <path d="M0,0 C150,60 350,0 600,40 C850,80 1050,20 1200,60 L1200,120 L0,120 Z" fill="none" className="text-orange-50 dark:text-gray-900" />
+            <path d="M0,0 C150,60 350,0 600,40 C850,80 1050,20 1200,60 L1200,120 L0,120 Z" className="dark:text-gray-800 text-white" fill="currentColor" />
           </svg>
+        </div>
+        <div className='max-w-200 m-auto pb-4 px-4'>
+          <UserInfoCard usuario={Loggeduser} />
         </div>
       </div>
 
@@ -97,9 +109,9 @@ export const Inicio = () => {
         </div>
       </div> */}
 
-      {/* Menu Cards */}
+
       <div className='max-w-97  p-4 flex m-auto'>
-          <ThemeButton/>
+        <ThemeButton />
       </div>
       <div className="p-6 pb-12">
         <div className="max-w-6xl mx-auto">
@@ -107,11 +119,11 @@ export const Inicio = () => {
             Acesso Rápido
           </h2>
 
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {menuCards.map((card) => {
               const Icon = card.icon;
-              
+
               return (
                 <Link
                   key={card.path}
@@ -121,15 +133,15 @@ export const Inicio = () => {
                   <div className={`w-16 h-16 bg-linear-to-br ${card.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className="text-white" size={32} />
                   </div>
-                  
+
                   <h3 className="text-xl font-nunito-bold text-gray-800 dark:text-white mb-3">
                     {card.title}
                   </h3>
-                  
+
                   <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                     {card.description}
                   </p>
-                  
+
                   <div className="mt-6 flex items-center gap-2 text-purple-600 dark:text-purple-400 font-medium text-sm group-hover:gap-3 transition-all">
                     Acessar
                     <span className="group-hover:translate-x-1 transition-transform">→</span>

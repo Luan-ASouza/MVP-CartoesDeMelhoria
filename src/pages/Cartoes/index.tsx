@@ -1,52 +1,151 @@
-import { useState } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { Card } from '../../components/Card';
 import { Plus } from 'lucide-react';
-import { FilterDropdown } from '../../components/FilterDropdown'
+import { FilterDropdown } from '../../components/FilterDropdown';
 import { SearchBar } from '../../components/SearchBar';
 import { useUser } from '../../context/UserContext';
 import { type CardData, CardsMock } from '../../mocks/CardMock';
 import CardFormSkeleton from '../../components/CardForm/CardFormSkeleton';
-
-import { lazy, Suspense } from 'react';
+import { Dashboards } from '../../components/Dashboards';
 
 const CardForm = lazy(() => import('../../components/CardForm/CardForm'));
 
 export const Cartoes = () => {
     const { Loggeduser } = useUser();
 
-    // Usuário logado
-
-
     const [cards, setCards] = useState<CardData[]>(CardsMock);
-
     const [showForm, setShowForm] = useState(false);
     const [editingCardId, setEditingCardId] = useState<number | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTypeFilters, setSelectedTypeFilters] = useState<string[]>(['Todos']);
 
+    const types = [
+        'Desenvolvimento',
+        'Code Review',
+        'Documentação',
+        'Bug Fix',
+        'Design',
+        'Reunião',
+        'Planejamento'
+    ];
 
-    const types = ['Desenvolvimento', 'Code Review', 'Documentação', 'Bug Fix', 'Design', 'Reunião', 'Planejamento'];
+    const META_ANO = 90;
+    const META_MES = 8;
 
-    // Calcular totais
+    // 🔹 Parsear data brasileira
+    const parseDate = (brDate: string): Date => {
+        const monthMap: { [key: string]: number } = {
+            'jan': 0, 'fev': 1, 'mar': 2, 'abr': 3, 'mai': 4, 'jun': 5,
+            'jul': 6, 'ago': 7, 'set': 8, 'out': 9, 'nov': 10, 'dez': 11
+        };
+
+        const parts = brDate.split(' ');
+        const day = parseInt(parts[0]);
+        const month = monthMap[parts[1]?.toLowerCase()];
+        const year = parseInt(parts[2]);
+
+        return new Date(year, month, day);
+    };
+
+    // 🔹 Dados gráfico últimos 6 meses
+    const monthlyData = useMemo(() => {
+        const last6Months = [];
+        const now = new Date();
+
+        for (let i = 5; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthName = date.toLocaleDateString('pt-BR', { month: 'short' });
+
+            const count = cards.filter(card => {
+                const cardDate = parseDate(card.date);
+                return (
+                    cardDate.getMonth() === date.getMonth() &&
+                    cardDate.getFullYear() === date.getFullYear()
+                );
+            }).length;
+
+            last6Months.push({ mes: monthName, quantidade: count });
+        }
+
+        return last6Months;
+    }, [cards]);
+
+    // 🔹 Dados gráfico tipos
+    const typeData = useMemo(() => {
+        const typeCounts: { [key: string]: number } = {};
+
+        cards.forEach(card => {
+            typeCounts[card.type] = (typeCounts[card.type] || 0) + 1;
+        });
+
+        return Object.entries(typeCounts).map(([name, value]) => ({
+            name,
+            value
+        }));
+    }, [cards]);
+
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
 
-    const totalCardsYear = cards.filter(card => {
-        const cardDate = new Date(card.date);
-        return cardDate.getFullYear() === currentYear;
-    }).length;
+    const totalCardsYear = cards.filter(card =>
+        parseDate(card.date).getFullYear() === currentYear
+    ).length;
 
     const totalCardsMonth = cards.filter(card => {
-        const cardDate = new Date(card.date);
-        return cardDate.getFullYear() === currentYear && cardDate.getMonth() === currentMonth;
+        const cardDate = parseDate(card.date);
+        return (
+            cardDate.getFullYear() === currentYear &&
+            cardDate.getMonth() === currentMonth
+        );
     }).length;
 
+    // 🔹 Filtros
+    const filteredCards = cards.filter(card => {
+        const matchesSearch =
+            searchQuery === '' ||
+            card.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            card.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            card.memberName.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesType =
+            selectedTypeFilters.includes('Todos') ||
+            selectedTypeFilters.includes(card.type);
+
+        return matchesSearch && matchesType;
+    });
+
+    // 🔹 Agrupar por mês
+    const cardsByMonth = useMemo(() => {
+        const grouped: { [key: string]: CardData[] } = {};
+
+        filteredCards.forEach(card => {
+            const date = parseDate(card.date);
+            const key = date.toLocaleDateString('pt-BR', {
+                month: 'long',
+                year: 'numeric'
+            });
+
+            if (!grouped[key]) grouped[key] = [];
+            grouped[key].push(card);
+        });
+
+        return Object.entries(grouped).sort((a, b) => {
+            const dateA = parseDate(a[1][0].date);
+            const dateB = parseDate(b[1][0].date);
+            return dateB.getTime() - dateA.getTime();
+        });
+    }, [filteredCards]);
+
+    // 🔹 CRUD
     const addNewCard = (formData: { type: string; description: string; date: string }) => {
         const newId = Math.max(...cards.map(c => c.id), 0) + 1;
 
-        // Formatar data para o padrão brasileiro
         const dateObj = new Date(formData.date + 'T00:00:00');
-        const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+        const formattedDate = dateObj.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
 
         const newCard: CardData = {
             id: newId,
@@ -64,18 +163,16 @@ export const Cartoes = () => {
     const updateCard = (formData: { type: string; description: string; date: string }) => {
         if (!editingCardId) return;
 
-        // Formatar data para o padrão brasileiro
         const dateObj = new Date(formData.date + 'T00:00:00');
-        const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+        const formattedDate = dateObj.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
 
         setCards(cards.map(card =>
             card.id === editingCardId
-                ? {
-                    ...card,
-                    type: formData.type,
-                    description: formData.description,
-                    date: formattedDate
-                }
+                ? { ...card, type: formData.type, description: formData.description, date: formattedDate }
                 : card
         ));
 
@@ -84,11 +181,7 @@ export const Cartoes = () => {
     };
 
     const handleFormSubmit = (formData: { type: string; description: string; date: string }) => {
-        if (editingCardId) {
-            updateCard(formData);
-        } else {
-            addNewCard(formData);
-        }
+        editingCardId ? updateCard(formData) : addNewCard(formData);
     };
 
     const handleFormClose = () => {
@@ -96,13 +189,11 @@ export const Cartoes = () => {
         setEditingCardId(null);
     };
 
-    const removeCard = (id: number) => {
+    const removeCard = (id: number) =>
         setCards(cards.filter(card => card.id !== id));
-    };
 
     const editCard = (id: number) => {
         const card = cards.find(c => c.id === id);
-        // Só permite editar se for do usuário logado
         if (card && card.memberName === Loggeduser.userName) {
             setEditingCardId(id);
             setShowForm(true);
@@ -116,28 +207,13 @@ export const Cartoes = () => {
             const newFilters = selectedTypeFilters.includes('Todos')
                 ? [type]
                 : selectedTypeFilters.includes(type)
-                    ? selectedTypeFilters.filter(t => t !== type)
-                    : [...selectedTypeFilters, type];
+                ? selectedTypeFilters.filter(t => t !== type)
+                : [...selectedTypeFilters, type];
 
             setSelectedTypeFilters(newFilters.length === 0 ? ['Todos'] : newFilters);
         }
     };
 
-    // Filtrar cartões
-    const filteredCards = cards.filter(card => {
-        // Filtro de pesquisa
-        const matchesSearch = searchQuery === '' ||
-            card.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            card.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            card.memberName.toLowerCase().includes(searchQuery.toLowerCase());
-
-        // Filtro de tipo
-        const matchesType = selectedTypeFilters.includes('Todos') || selectedTypeFilters.includes(card.type);
-
-        return matchesSearch && matchesType;
-    });
-
-    // Converter data do formato brasileiro (DD MMM YYYY) para YYYY-MM-DD
     const convertBrDateToISO = (brDate: string): string => {
         const monthMap: { [key: string]: string } = {
             'jan': '01', 'fev': '02', 'mar': '03', 'abr': '04',
@@ -157,6 +233,7 @@ export const Cartoes = () => {
 
     return (
         <div className="min-h-screen bg-linear-to-b from-orange-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+
             <SearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
@@ -164,32 +241,8 @@ export const Cartoes = () => {
 
             <div className="px-6 py-8 -mt-6">
                 <div className="max-w-7xl mx-auto">
-                    {/* Estatísticas */}
-                    <div className="grid grid-cols-2 gap-4 mb-8">
-                        <div className="bg-linear-to-br from-orange-400 to-orange-600 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="relative z-10">
-                                <p className="text-white/90 text-sm mb-2">Total do Ano</p>
-                                <p className="text-4xl mb-1 font-nunito-extrabold">
-                                    {totalCardsYear}
-                                </p>
-                                <p className="text-white/70 text-xs">cartões</p>
-                            </div>
-                        </div>
 
-                        <div className="bg-linear-to-br from-purple-400 to-purple-600 rounded-3xl p-6 shadow-lg text-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="relative z-10">
-                                <p className="text-white/90 text-sm mb-2">Total do Mês</p>
-                                <p className="text-4xl mb-1 font-nunito-extrabold">
-                                    {totalCardsMonth}
-                                </p>
-                                <p className="text-white/70 text-xs">cartões</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Título e botão */}
+                    {/* Título */}
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl text-gray-800 dark:text-white font-nunito-bold">
                             Cartões de melhoria
@@ -197,45 +250,51 @@ export const Cartoes = () => {
 
                         <button
                             onClick={() => setShowForm(true)}
-                            className="flex items-center gap-2 bg-linear-to-r from-orange-500 to-purple-600 text-white px-5 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            className="flex items-center gap-2 bg-linear-to-r from-orange-500 to-purple-600 text-white px-5 py-3 rounded-2xl shadow-lg"
                         >
                             <Plus size={20} />
                             <span className="text-sm">Novo Cartão</span>
                         </button>
                     </div>
 
-                    {/* Filtros de tipo */}
+                    {/* Dashboard */}
+                    <Dashboards
+                        monthlyData={monthlyData}
+                        typeData={typeData}
+                        totalCardsYear={totalCardsYear}
+                        totalCardsMonth={totalCardsMonth}
+                        metaAno={META_ANO}
+                        metaMes={META_MES}
+                    />
+
+                    {/* Filtros */}
                     <FilterDropdown
                         onFilter={handleTypeFilterToggle}
                         types={types}
                         selectedTypeFilters={selectedTypeFilters}
                     />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {filteredCards.map((card) => (
-                            <Card
-                                key={card.id}
-                                CardData={card}
-                                currentUserName={Loggeduser.userName}
-                                onRemove={removeCard}
-                                onEdit={editCard}
-                            />
-                        ))}
-                    </div>
+                    {/* Cards por mês */}
+                    {cardsByMonth.map(([monthYear, monthCards]) => (
+                        <div key={monthYear} className="mb-8">
+                            <h3 className="text-xl font-nunito-bold text-gray-800 dark:text-white mb-4 capitalize">
+                                {monthYear}
+                            </h3>
 
-                    {filteredCards.length === 0 && (
-                        <div className="text-center py-20 bg-white rounded-3xl shadow-lg">
-                            <div className="text-6xl mb-4">📋</div>
-                            <p className="text-gray-400 text-lg mb-6">Nenhum cartão adicionado ainda</p>
-                            <button
-                                onClick={() => setShowForm(true)}
-                                className="inline-flex items-center gap-2 bg-linear-to-r from-orange-500 to-purple-600 text-white px-6 py-3 rounded-2xl hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
-                            >
-                                <Plus size={20} />
-                                Novo Cartão
-                            </button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {monthCards.map((card) => (
+                                    <Card
+                                        key={card.id}
+                                        CardData={card}
+                                        currentUserName={Loggeduser.userName}
+                                        onRemove={removeCard}
+                                        onEdit={editCard}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    )}
+                    ))}
+
                 </div>
             </div>
 
@@ -256,6 +315,6 @@ export const Cartoes = () => {
             )}
         </div>
     );
-}
+};
 
 export default Cartoes;

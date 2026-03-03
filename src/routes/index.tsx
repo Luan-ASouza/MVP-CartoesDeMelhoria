@@ -3,17 +3,23 @@ import { lazy, Suspense } from "react";
 import Inicio from "../pages/Inicio";
 import { Loading } from "../components/Loading";
 import Layout from "../pages/Layout";
+import LoginPage from "../pages/Login";
 
 /* const Layout = lazy(() => import("../components/Layout")); */
 const Cartoes = lazy(() => import("../pages/Cartoes"));
 const Armarios = lazy(() => import("../pages/Armarios"));
 const Etiquetas = lazy(() => import("../pages/Etiquetas"));
 const ConjuntoArmarios = lazy(() => import("../pages/ConjuntoArmarios"));
+const isLogged = localStorage.getItem('usuario');
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Inicio />} />
+      {isLogged !== ''? (
+        <Route path="/" element={<Inicio />} />
+      ) : (
+        <Route path="/" element={<LoginPage />} />
+        )}
 
       <Route
         element={

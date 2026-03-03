@@ -1,5 +1,6 @@
-import { Home, NotebookPen, Grid3x2, Tags, LogOut } from 'lucide-react';
+import { Home, NotebookPen, Grid3x2, Tags } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
+import { LogoutButton } from '../LogoutButton'
 
 import { useUser } from '../../context/UserContext';
 import ThemeButton from '../ThemeButton';
@@ -20,10 +21,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { path: '/armarios', label: 'Armários', icon: Grid3x2 },
     { path: '/etiquetas', label: 'Etiquetas', icon: Tags },
   ];
-
-  const handleLogout = () => {
-    console.log('Desconectando...');
-  };
 
   return (
     <>
@@ -80,19 +77,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </ul>
 
             <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-all"
-              >
-                <LogOut size={20} />
-                <span className="font-medium">Desconectar</span>
-              </button>
+
+              <LogoutButton />
             </div>
           </nav>
 
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          {/* Theme Toggle */}
-            <ThemeButton/>
+            {/* Theme Toggle */}
+            <ThemeButton />
           </div>
         </div>
       </aside>

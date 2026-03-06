@@ -7,7 +7,7 @@ export const Footer = () => {
                 </p>
 
                 <p className="text-xs text-gray-500 mt-2">
-                    Desenvolvido com dedicação e foco em melhoria contínua 🚀
+                    Desenvolvido com dedicação e foco em melhoria contínua.
                 </p>
             </div>
         </footer>

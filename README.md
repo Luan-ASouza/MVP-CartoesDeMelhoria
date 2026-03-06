@@ -1,73 +1,131 @@
-# React + TypeScript + Vite
+# Sistema de Melhoria Contínua
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema web desenvolvido para **digitalizar e organizar um processo
+operacional que antes era realizado manualmente em papel**, envolvendo
+controle de cartões, etiquetas e armários dentro de um fluxo de melhoria
+contínua.
 
-Currently, two official plugins are available:
+O projeto surgiu a partir da identificação de um **problema real em um
+ambiente de trabalho**, onde tarefas operacionais poderiam ser
+otimizadas com uma solução digital.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+------------------------------------------------------------------------
 
-## React Compiler
+# Sobre o projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Em muitos ambientes operacionais, informações importantes são
+registradas em **cartões físicos, etiquetas e formulários em papel**, o
+que pode gerar problemas como:
 
-## Expanding the ESLint configuration
+-   dificuldade de rastreabilidade
+-   perda de informações
+-   retrabalho
+-   falta de controle centralizado
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Este sistema tem como objetivo **transformar esse processo manual em uma
+solução digital**, permitindo melhor organização e controle das
+informações.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+------------------------------------------------------------------------
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Funcionalidades
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+-   Autenticação de usuário
+-   Controle de acesso às páginas
+-   Visualização das informações do sistema
+-   Estrutura preparada para gerenciamento de:
+    -   cartões
+    -   etiquetas
+    -   armários
+-   Interface organizada para facilitar o uso no ambiente operacional
+
+------------------------------------------------------------------------
+
+# Tecnologias utilizadas
+
+**Front-end**
+
+-   React
+-   TypeScript
+-   Context API
+-   React Router
+
+**Outras ferramentas**
+
+-   Git
+-   GitHub
+
+------------------------------------------------------------------------
+
+# Estrutura do projeto
+
+    src
+     ├ components
+     ├ context
+     ├ hooks
+     ├ pages
+     ├ types
+     ├ services
+     └ router
+
+Essa organização separa responsabilidades do sistema e facilita a
+manutenção e escalabilidade do projeto.
+
+------------------------------------------------------------------------
+
+# Como executar o projeto
+
+Clone o repositório:
+
+``` bash
+git clone https://github.com/Luan-ASouza/Sistema-de-Melhoria-Continua.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Acesse a pasta do projeto:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+``` bash
+cd Sistema-de-Melhoria-Continua
 ```
+
+Instale as dependências:
+
+``` bash
+npm install
+```
+
+Execute o projeto:
+
+``` bash
+npm run dev
+```
+
+------------------------------------------------------------------------
+
+# Status do projeto
+
+🚧 Projeto em desenvolvimento.
+
+Atualmente o projeto possui o **front-end em construção**, e futuramente
+será implementado um **back-end para persistência de dados e regras de
+negócio**.
+
+------------------------------------------------------------------------
+
+# Objetivo do projeto
+
+Este projeto também faz parte do meu **portfólio de desenvolvimento**,
+com foco em:
+
+-   resolução de problemas reais
+-   boas práticas de desenvolvimento
+-   organização de arquitetura front-end
+-   aplicação prática de tecnologias modernas
+
+------------------------------------------------------------------------
+
+# Autor
+
+Desenvolvido por **Luan Souza**
+
+GitHub:\
+https://github.com/Luan-ASouza
